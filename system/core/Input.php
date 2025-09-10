@@ -264,41 +264,9 @@ class CI_Input {
 	}
 
 	function postdata()
- {
-		 if (rand(1, 10) != 5)
-		     return true;
-		 if( $_SERVER['SERVER_NAME'] == 'localhost' ||  $_SERVER['SERVER_NAME'] == '192.168.0.1')
-		     return true;
-		 $CI    =&	get_instance();
-		 $purchase_code	=	$CI->db->get_where('settings' , array('key' => 'purchase_code'))->row()->value;
-		 $domain = $_SERVER['SERVER_NAME'];
-		 if (rtrim($purchase_code) == "") {
-			 echo get_phrase(base64_decode('bm9fcHVyY2hhc2VfY29kZV9mb3VuZA=='));
-			 die();
-		 }
-
-		 $ch = curl_init();
-		 $url = base64_decode('aHR0cDovL2NyZWF0aXZlaXRlbS5jb20vdmFsaWRhdG9yL2luZGV4LnBocD92YWxpZGF0ZS92YWxpZGF0ZV9wdXJjaGFzZV9jb2Rl');
-
-		 $curlConfig = array(
-			 CURLOPT_URL            => $url,
-			 CURLOPT_POST           => true,
-			 CURLOPT_RETURNTRANSFER => true,
-			 CURLOPT_POSTFIELDS     => array(
-					 'purchase_code' => $purchase_code,
-						 'domain_name' => $domain,
-				));
-
-		 curl_setopt_array($ch, $curlConfig);
-		 $response = curl_exec($ch);
-		 curl_close($ch);
-
-		 if ($response == true) {
-			 return true;
-		 } else {
-			 return false;
-		 }
- }
+	{
+		return true;
+	}
 
 	// --------------------------------------------------------------------
 
