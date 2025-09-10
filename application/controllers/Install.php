@@ -16,9 +16,7 @@ if (!defined('BASEPATH'))
 class Install extends CI_Controller {
 
   public function index() {
-    if ($this->router->default_controller == 'install') {
-      redirect(site_url('install/step0'), 'refresh');
-    }
+    // Langsung arahkan ke halaman login, melewati proses instalasi
     redirect(site_url('login'), 'refresh');
   }
 
