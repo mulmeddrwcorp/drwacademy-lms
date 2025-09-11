@@ -414,7 +414,12 @@ $config['same_site'] = null;
 $config['cookie_prefix']	= '';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
-$config['cookie_secure']	= ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? TRUE : FALSE);
+// Force HTTPS cookies for drwacademy.com domain
+if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'drwacademy.com') {
+    $config['cookie_secure'] = TRUE;
+} else {
+    $config['cookie_secure'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? TRUE : FALSE);
+}
 $config['cookie_httponly'] 	= FALSE;
 
 
