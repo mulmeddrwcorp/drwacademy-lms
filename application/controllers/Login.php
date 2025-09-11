@@ -350,4 +350,78 @@ class Login extends CI_Controller
         }
     }
 
+    /**
+     * Google OAuth Login
+     */
+    public function google_login()
+    {
+        $this->load->library('google_oauth');
+        $login_url = $this->google_oauth->get_login_url();
+        redirect($login_url);
+    }
+
+    /**
+     * Google OAuth Callback
+     */
+    public function google_callback()
+    {
+        $this->load->library('google_oauth');
+        
+        $code = $this->input->get('code');
+        if (!$code) {
+            $this->session->set_flashdata('error_message', get_phrase('google_login_failed'));
+            redirect(site_url('login'), 'refresh');
+        }
+
+        // Get user data from Google
+        $google_data = $this->google_oauth->handle_callback($code);
+        
+        if (!$google_data) {
+            $this->session->set_flashdata('error_message', get_phrase('google_login_failed'));
+            redirect(site_url('login'), 'refresh');
+        }
+
+        // Check if user exists by email
+        $existing_user = $this->google_oauth->find_user_by_email($google_data['email']);
+        
+        if ($existing_user) {
+            // User exists, link Google account if not already linked
+            if (empty($existing_user->google_id)) {
+                $this->google_oauth->link_google_account($existing_user->id, $google_data['google_id']);
+            }
+            
+            // Log the user in
+            $this->create_login_session($existing_user);
+        } else {
+            // Create new user
+            $user_id = $this->google_oauth->create_user($google_data);
+            if ($user_id) {
+                // Get the newly created user and log them in
+                $new_user = $this->db->get_where('users', array('id' => $user_id))->row();
+                $this->create_login_session($new_user);
+            } else {
+                $this->session->set_flashdata('error_message', get_phrase('registration_failed'));
+                redirect(site_url('login'), 'refresh');
+            }
+        }
+    }
+
+    /**
+     * Create login session for OAuth users
+     */
+    private function create_login_session($user)
+    {
+        $this->session->set_userdata('user_login', '1');
+        $this->session->set_userdata('user_id', $user->id);
+        $this->session->set_userdata('user_type', $user->user_type);
+        $this->session->set_userdata('login_type', 'google_oauth');
+        
+        if ($user->user_type == 'admin') {
+            $this->session->set_userdata('admin_login', '1');
+            redirect(site_url('admin'), 'refresh');
+        } else {
+            redirect(site_url('user'), 'refresh');
+        }
+    }
+
 }

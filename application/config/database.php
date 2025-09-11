@@ -75,8 +75,8 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '127.0.0.1',
-	'port'     => 3307,
+	'hostname' => 'db',
+	'port'     => 3306,
 	'username' => 'academy_user',
 	'password' => 'strong_password',
 	'database' => 'academy_db',

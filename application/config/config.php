@@ -535,3 +535,16 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+/*
+|--------------------------------------------------------------------------
+| Google OAuth Configuration
+|--------------------------------------------------------------------------
+|
+| These settings are for Google OAuth authentication
+| You need to create a Google OAuth app at: https://console.developers.google.com
+|
+*/
+$config['google_client_id'] = '';
+$config['google_client_secret'] = '';
+$config['google_redirect_uri'] = '';
